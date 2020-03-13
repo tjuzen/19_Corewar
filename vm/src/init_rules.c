@@ -17,10 +17,10 @@ void init_all_rules(t_main *struk)
     int i;
     t_arena *init;
 
+    i = 0;
     if (!(init = ft_memalloc(sizeof(t_arena))))
         leave("Failed malloc of arena");
     struk->map = init;
-    i = 0;
     struk->nbr_cycles = CYCLE_TO_DIE;
     struk->max_cycle = 0;
     struk->nbr_live = 21;
@@ -34,7 +34,10 @@ void init_all_rules(t_main *struk)
     i = -1;
     while (++i <= MEM_SIZE)
         struk->map->arena[i] = 0;
-    struk->map->arena[i] = '\0';
+    i = -1;
+    while (++i <= MEM_SIZE)
+        struk->map->code_property[i] = 0;
+
     // Initier les premier curseur en fonction de l'ordre établis dans le parsing
 }
 

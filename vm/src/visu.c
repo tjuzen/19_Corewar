@@ -77,6 +77,7 @@ void setcolor(int fg, int bg, t_main *struk)
     /* set the color pair (colornum) and bold/bright (A_BOLD) */
 
     wattron(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
+    wattron(struk->map->warena, COLOR_PAIR(colornum(fg, bg)));
     if (is_bold(fg))
     {
         attron(A_BOLD);
@@ -89,6 +90,7 @@ void unsetcolor(int fg, int bg, t_main *struk)
        bold/bright (A_BOLD) */
 
     wattroff(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
+    wattroff(struk->map->warena, COLOR_PAIR(colornum(fg, bg)));
     if (is_bold(fg))
     {
         attroff(A_BOLD);
@@ -190,8 +192,8 @@ void print_arena(t_main *struk)
     j = 3;
     z = 0;
 
-    struk->map->arena[0] = '1'; // pour verifier que je parcours bien tout le tableau avec le visu
-    struk->map->arena[4095] = '9';
+    // struk->map->arena[0] = '1'; // pour verifier que je parcours bien tout le tableau avec le visu
+    // struk->map->arena[4095] = '9';
 
     while (i < 64)
     {
@@ -199,7 +201,25 @@ void print_arena(t_main *struk)
         x = 0;
         while (x < 64)
         {
-            if (z <= MEM_SIZE)
+            if (struk->map->code_property[z] == 1)
+            {
+                wattron(struk->map->warena, A_BLINK);
+                setcolor(12, 0, struk);
+                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                refresh();
+                wrefresh(struk->map->warena);
+                wattroff(struk->map->warena, A_BLINK);
+                unsetcolor(12, 0, struk);
+            }
+            else if (struk->map->code_property[z] == 2)
+            {
+                setcolor(10, 0, struk);
+                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                refresh();
+                wrefresh(struk->map->warena);
+                unsetcolor(10, 0, struk);
+            }
+            else
                 mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
             j += 3;
             x++;

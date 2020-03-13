@@ -105,9 +105,25 @@ t_main *some_parsing_checks(int fd, t_main *struk, int num_play)
 ** Recupere les executable code des champions et les stockes dans  l'arene (la memoire)
 */
 
-void load_champ_to_arena(t_main *struk)
+void load_champ_to_arena(t_main *struk) // en attente de la fonction de greg
 {
-	printf("\n\nICI HEHEHEHEHEHEHEEEHHEEHEHEHEEEEHEHEHHEEHEHEH %s\n\n", struk->player[0].code);
+	int i;
+
+	i = 0;
+	while (i < 100)
+	{
+		struk->map->arena[i] = struk->player[0].code[i];
+		struk->map->code_property[i] = 1;
+		i++;
+	}
+
+	i = 2048;
+	while (i < 2148)
+	{
+		struk->map->arena[i] = struk->player[0].code[i - 2048];
+		struk->map->code_property[i] = 2;
+		i++;
+	}
 }
 
 /*
@@ -141,7 +157,6 @@ int go_parse(t_main *struk, int argc, char **argv)
 			}
 			i++;
 		}
-		load_champ_to_arena(struk); // pour ajouter le code d'execution du champion dans notre memoire
 		return (0);
 	}
 	return (0);
@@ -153,12 +168,7 @@ int main(int argc, char **argv)
 
 	go_parse(&struk, argc, argv);
 	rules_round(&struk);
-
-	// int i = -1;
-
-	// while (++i < MEM_SIZE)
-	// 	printf("%02x ", struk.map->arena[i]);
-
+	load_champ_to_arena(&struk); // en attente de la fonction de greg
 	start_ncurses(&struk);
 	return (0);
 }
