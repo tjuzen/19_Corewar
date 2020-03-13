@@ -91,6 +91,7 @@ int process_actions(t_main *struk, int cycles)
 
 // Ici on a le maitre du jeu, qui s'assure que les règles sont bien respecter
 // et check tous les X tours que tous le monde a dis qu'ils étaient en vie.
+
 int rules_round(t_main *struk)
 {
     int cycles;
@@ -100,6 +101,9 @@ int rules_round(t_main *struk)
     printf("nbr_cycles: %i\n", struk->nbr_cycles);
     init_all_rules(struk);
     load_champ_to_arena(struk); // en attente de la fonction de greg
+    printf("Je suce ici 11 %i\n", struk->map->cursor_map[0]);
+    printf("Je suce ici 22 %i\n", struk->map->cursor_map[1]);
+    printf("Je suce ici 33 %i\n", struk->map->cursor_map[2]);
     while (struk->nbr_cycles > 0 && struk->agent)
     {
         // printf ("cycles %% nbr_cycles: %i\n", (cycles % struk->nbr_cycles));

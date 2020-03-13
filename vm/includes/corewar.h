@@ -32,7 +32,7 @@ typedef struct s_lut
 {
 	unsigned char arena[MEM_SIZE];
 	int code_property[MEM_SIZE];
-	// int
+	int cursor_map[MEM_SIZE];
 	WINDOW *warena;
 	WINDOW *winfos;
 	int maxlines;

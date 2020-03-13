@@ -37,7 +37,9 @@ void init_all_rules(t_main *struk)
     i = -1;
     while (++i <= MEM_SIZE)
         struk->map->code_property[i] = 0;
-
+    i = -1;
+    while (++i <= MEM_SIZE)
+        struk->map->cursor_map[i] = 0;
     // Initier les premier curseur en fonction de l'ordre établis dans le parsing
 }
 
@@ -72,6 +74,10 @@ void init_cursor(t_main *struk, int i)
     cursor->id = i;
     cursor->carry = 0;
     cursor->position = 0;
+    struk->map->cursor_map[0] = 1;
+    printf("Je suce 11 %i\n", struk->map->cursor_map[0]);
+    printf("Je suce 22 %i\n", struk->map->cursor_map[1]);
+    printf("Je suce 33 %i\n", struk->map->cursor_map[2]);
     cursor->wait_cycles = 1;
     cursor->jump = 0;
     cursor->last_live = -1;

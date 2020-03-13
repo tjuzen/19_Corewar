@@ -172,24 +172,46 @@ void print_arena(t_main *struk)
         {
             if (struk->map->code_property[z] == 1)
             {
-                setcolor(12, 12, struk);
-                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
-                refresh();
-                wrefresh(struk->map->warena);
-                unsetcolor(12, 12, struk);
+                if (struk->map->cursor_map[z] == 1)
+                {
+                    setcolor(0, 12, struk);
+                    mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
+                    refresh();
+                    wrefresh(struk->map->warena);
+                    unsetcolor(0, 12, struk);
+                }
+                else
+                {
+                    setcolor(12, 0, struk);
+                    mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
+                    refresh();
+                    wrefresh(struk->map->warena);
+                    unsetcolor(12, 0, struk);
+                }
             }
             else if (struk->map->code_property[z] == 2)
             {
-                setcolor(10, 0, struk);
-                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
-                refresh();
-                wrefresh(struk->map->warena);
-                unsetcolor(10, 0, struk);
+                if (struk->map->cursor_map[z] == 1)
+                {
+                    setcolor(0, 10, struk);
+                    mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
+                    refresh();
+                    wrefresh(struk->map->warena);
+                    unsetcolor(0, 10, struk);
+                }
+                else
+                {
+                    setcolor(10, 0, struk);
+                    mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
+                    refresh();
+                    wrefresh(struk->map->warena);
+                    unsetcolor(10, 0, struk);
+                }
             }
             else if (struk->map->code_property[z] == 3)
             {
                 setcolor(8, 0, struk);
-                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
                 refresh();
                 wrefresh(struk->map->warena);
                 unsetcolor(8, 0, struk);
@@ -197,13 +219,13 @@ void print_arena(t_main *struk)
             else if (struk->map->code_property[z] == 4)
             {
                 setcolor(6, 0, struk);
-                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
                 refresh();
                 wrefresh(struk->map->warena);
                 unsetcolor(6, 0, struk);
             }
             else
-                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                mvwprintw(struk->map->warena, i + 2, j + 1, "%02x", struk->map->arena[z++]);
             j += 3;
             x++;
         }

@@ -168,6 +168,8 @@ int main(int argc, char **argv)
 
 	go_parse(&struk, argc, argv);
 	rules_round(&struk);
+	struk.map->cursor_map[0] = 1;
+	struk.map->cursor_map[2048] = 1;
 	start_ncurses(&struk);
 	return (0);
 }
