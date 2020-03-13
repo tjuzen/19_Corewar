@@ -168,7 +168,6 @@ int main(int argc, char **argv)
 
 	go_parse(&struk, argc, argv);
 	rules_round(&struk);
-	load_champ_to_arena(&struk); // en attente de la fonction de greg
 	start_ncurses(&struk);
 	return (0);
 }

@@ -12,11 +12,12 @@
 
 #include "../includes/corewar.h"
 
-void execute(t_main *struk) {
+void execute(t_main *struk)
+{
     printf("         |   J'execute! _____\n");
 }
 
-void    do_actions(t_main *struk, t_process *tmp, int cycles)
+void do_actions(t_main *struk, t_process *tmp, int cycles)
 {
     // Récupérer l'actions a effectuer
     if (check_operation(struk, tmp))
@@ -24,7 +25,7 @@ void    do_actions(t_main *struk, t_process *tmp, int cycles)
     refresh_cursor(struk, tmp, cycles);
 }
 
-t_process    *kill_cursor(t_main *struk, t_process *prev)
+t_process *kill_cursor(t_main *struk, t_process *prev)
 {
     t_process *tmp;
 
@@ -35,7 +36,7 @@ t_process    *kill_cursor(t_main *struk, t_process *prev)
         printf("JE TUE BRAAAAH BRHH! ____\n");
         tmp = struk->agent->next;
         // je link avec le début de la liste, c'est le premniere element qu'on kill
-        free (struk->agent);
+        free(struk->agent);
         struk->agent = tmp;
         return (struk->agent);
     }
@@ -57,7 +58,7 @@ t_process    *kill_cursor(t_main *struk, t_process *prev)
 // Ici on parcours tous nos process, on check voir si ils doivent mourrir,
 // si oui on les tues, si non on check voir si ils peuvent jouer.
 // Si ils peuvent ben ils jouent :D
-int     process_actions(t_main *struk, int cycles)
+int process_actions(t_main *struk, int cycles)
 {
     t_process *tmp;
     t_process *prev;
@@ -69,7 +70,7 @@ int     process_actions(t_main *struk, int cycles)
     while (tmp)
     {
         // if ((tmp->last_live - struk->nbr_cycles + CYCLE_DELTA) >= 0)
-        if (struk->die == 1 && check_kill(cycles, tmp, struk) == 1)/*tmp->last_live <= (cycles - struk->nbr_cycles + CYCLE_DELTA))*/
+        if (struk->die == 1 && check_kill(cycles, tmp, struk) == 1) /*tmp->last_live <= (cycles - struk->nbr_cycles + CYCLE_DELTA))*/
         {
             printf("CYCLES: %d\n", struk->nbr_cycles + CYCLE_DELTA);
             tmp = kill_cursor(struk, prev);
@@ -90,14 +91,15 @@ int     process_actions(t_main *struk, int cycles)
 
 // Ici on a le maitre du jeu, qui s'assure que les règles sont bien respecter
 // et check tous les X tours que tous le monde a dis qu'ils étaient en vie.
-int    rules_round(t_main *struk)
+int rules_round(t_main *struk)
 {
     int cycles;
     int inter_cycles;
 
     cycles = 0;
-    printf ("nbr_cycles: %i\n", struk->nbr_cycles);
+    printf("nbr_cycles: %i\n", struk->nbr_cycles);
     init_all_rules(struk);
+    load_champ_to_arena(struk); // en attente de la fonction de greg
     while (struk->nbr_cycles > 0 && struk->agent)
     {
         // printf ("cycles %% nbr_cycles: %i\n", (cycles % struk->nbr_cycles));

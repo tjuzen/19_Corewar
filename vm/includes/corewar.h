@@ -32,6 +32,7 @@ typedef struct s_lut
 {
 	unsigned char arena[MEM_SIZE];
 	int code_property[MEM_SIZE];
+	// int
 	WINDOW *warena;
 	WINDOW *winfos;
 	int maxlines;
@@ -82,6 +83,7 @@ int check_previous_player_number(t_main *struk);
 int open_files(int argc, char **argv, t_main *struk, int arg);
 int check_if_zero(uint8_t *buf);
 void problem_occured(char *problem);
+void load_champ_to_arena(t_main *struk);
 
 /*
 ** LEAVE.C

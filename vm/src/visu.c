@@ -15,22 +15,22 @@
 short curs_color(int fg)
 {
     switch (7 & fg)
-    {       /* RGB */
-    case 0: /* 000 */
+    {
+    case 0:
         return (COLOR_BLACK);
-    case 1: /* 001 */
+    case 1:
         return (COLOR_BLUE);
-    case 2: /* 010 */
+    case 2:
         return (COLOR_GREEN);
-    case 3: /* 011 */
+    case 3:
         return (COLOR_CYAN);
-    case 4: /* 100 */
+    case 4:
         return (COLOR_RED);
-    case 5: /* 101 */
+    case 5:
         return (COLOR_MAGENTA);
-    case 6: /* 110 */
+    case 6:
         return (COLOR_YELLOW);
-    case 7: /* 111 */
+    case 7:
         return (COLOR_WHITE);
     }
     return (COLOR_BLACK);
@@ -45,16 +45,6 @@ int colornum(int fg, int bg)
     ffff = 7 & fg;
 
     return (B | bbb | ffff);
-}
-
-int is_bold(int fg)
-{
-    /* return the intensity bit */
-
-    int i;
-
-    i = 1 << 3;
-    return (i & fg);
 }
 
 void init_colorpairs(void)
@@ -74,27 +64,14 @@ void init_colorpairs(void)
 
 void setcolor(int fg, int bg, t_main *struk)
 {
-    /* set the color pair (colornum) and bold/bright (A_BOLD) */
-
     wattron(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
     wattron(struk->map->warena, COLOR_PAIR(colornum(fg, bg)));
-    if (is_bold(fg))
-    {
-        attron(A_BOLD);
-    }
 }
 
 void unsetcolor(int fg, int bg, t_main *struk)
 {
-    /* unset the color pair (colornum) and
-       bold/bright (A_BOLD) */
-
     wattroff(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
     wattroff(struk->map->warena, COLOR_PAIR(colornum(fg, bg)));
-    if (is_bold(fg))
-    {
-        attroff(A_BOLD);
-    }
 }
 
 /*
@@ -135,12 +112,7 @@ void end_ncurses(t_main *struk)
 
 void print_header(t_main *struk)
 {
-    int fg;
-    int bg;
-
-    fg = 12;
-    bg = 0;
-    setcolor(fg, bg, struk); // ca serait cool si ca pouvais marcher
+    setcolor(12, 0, struk); // ca serait cool si ca pouvais marcher
     wattron(struk->map->winfos, A_BLINK);
     mvwprintw(struk->map->winfos, 2, 3, " ####   ####  #####  ###### #    #   ##   #####  ");
     mvwprintw(struk->map->winfos, 3, 3, "#    # #    # #    # #      #    #  #  #  #    # ");
@@ -151,7 +123,7 @@ void print_header(t_main *struk)
     wattroff(struk->map->winfos, A_BLINK);
     refresh();
     wrefresh(struk->map->winfos);
-    unsetcolor(fg, bg, struk); // mais ca marche pas
+    unsetcolor(12, 0, struk); // mais ca marche pas
 }
 
 /*
@@ -192,9 +164,6 @@ void print_arena(t_main *struk)
     j = 3;
     z = 0;
 
-    // struk->map->arena[0] = '1'; // pour verifier que je parcours bien tout le tableau avec le visu
-    // struk->map->arena[4095] = '9';
-
     while (i < 64)
     {
         j = 3;
@@ -203,13 +172,11 @@ void print_arena(t_main *struk)
         {
             if (struk->map->code_property[z] == 1)
             {
-                wattron(struk->map->warena, A_BLINK);
-                setcolor(12, 0, struk);
+                setcolor(12, 12, struk);
                 mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
                 refresh();
                 wrefresh(struk->map->warena);
-                wattroff(struk->map->warena, A_BLINK);
-                unsetcolor(12, 0, struk);
+                unsetcolor(12, 12, struk);
             }
             else if (struk->map->code_property[z] == 2)
             {
@@ -218,6 +185,22 @@ void print_arena(t_main *struk)
                 refresh();
                 wrefresh(struk->map->warena);
                 unsetcolor(10, 0, struk);
+            }
+            else if (struk->map->code_property[z] == 3)
+            {
+                setcolor(8, 0, struk);
+                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                refresh();
+                wrefresh(struk->map->warena);
+                unsetcolor(8, 0, struk);
+            }
+            else if (struk->map->code_property[z] == 4)
+            {
+                setcolor(6, 0, struk);
+                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+                refresh();
+                wrefresh(struk->map->warena);
+                unsetcolor(6, 0, struk);
             }
             else
                 mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
