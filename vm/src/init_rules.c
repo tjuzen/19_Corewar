@@ -12,7 +12,7 @@
 
 #include "../includes/corewar.h"
 
-void  init_all_rules(t_main *struk)
+void init_all_rules(t_main *struk)
 {
     int i;
     t_arena *init;
@@ -33,14 +33,14 @@ void  init_all_rules(t_main *struk)
     }
     i = -1;
     while (++i <= MEM_SIZE)
-        struk->map->arena[i] = '0';
+        struk->map->arena[i] = 0;
     struk->map->arena[i] = '\0';
     // Initier les premier curseur en fonction de l'ordre établis dans le parsing
 }
 
 // On réinitialise nos variables entre deux CYCLE_TO_DIE
 
-void  upload_rules_var(t_main *struk)
+void upload_rules_var(t_main *struk)
 {
     struk->nbr_cycles -= CYCLE_DELTA; // Si on a décrémenter ça veut dire,
     struk->max_cycle = 0;
@@ -48,7 +48,7 @@ void  upload_rules_var(t_main *struk)
     struk->die = 1; // qu'on peut tuer les process qui n'on pas dis live.
 }
 
-void  refresh_cursor(t_main *struk, t_process *tmp, int cycles)
+void refresh_cursor(t_main *struk, t_process *tmp, int cycles)
 {
     // tmp->id = 0;
     // tmp->carry = 0;
@@ -59,9 +59,9 @@ void  refresh_cursor(t_main *struk, t_process *tmp, int cycles)
     // tmp->registeries[REG_NUMBER] = 0;
 }
 
-void  init_cursor(t_main *struk, int i)
+void init_cursor(t_main *struk, int i)
 {
-    t_process   *cursor;
+    t_process *cursor;
 
     if (!(cursor = ft_memalloc(sizeof(t_process))))
         leave("maloc cursor failed");
@@ -82,11 +82,10 @@ void  init_cursor(t_main *struk, int i)
     }
 }
 
-
 /*
 **  Cette fonction transforme notre aire de jeux en mémoire circulaire.
 */
-int     circular_memory(int position, int movement, int memory_size)
+int circular_memory(int position, int movement, int memory_size)
 {
     int result;
 

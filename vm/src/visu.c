@@ -14,24 +14,26 @@
 
 short curs_color(int fg)
 {
-    switch (7 & fg) {           /* RGB */
-    case 0:                     /* 000 */
+    switch (7 & fg)
+    {       /* RGB */
+    case 0: /* 000 */
         return (COLOR_BLACK);
-    case 1:                     /* 001 */
+    case 1: /* 001 */
         return (COLOR_BLUE);
-    case 2:                     /* 010 */
+    case 2: /* 010 */
         return (COLOR_GREEN);
-    case 3:                     /* 011 */
+    case 3: /* 011 */
         return (COLOR_CYAN);
-    case 4:                     /* 100 */
+    case 4: /* 100 */
         return (COLOR_RED);
-    case 5:                     /* 101 */
+    case 5: /* 101 */
         return (COLOR_MAGENTA);
-    case 6:                     /* 110 */
+    case 6: /* 110 */
         return (COLOR_YELLOW);
-    case 7:                     /* 111 */
+    case 7: /* 111 */
         return (COLOR_WHITE);
     }
+    return (COLOR_BLACK);
 }
 
 int colornum(int fg, int bg)
@@ -60,21 +62,23 @@ void init_colorpairs(void)
     int fg, bg;
     int colorpair;
 
-    for (bg = 0; bg <= 7; bg++) {
-        for (fg = 0; fg <= 7; fg++) {
+    for (bg = 0; bg <= 7; bg++)
+    {
+        for (fg = 0; fg <= 7; fg++)
+        {
             colorpair = colornum(fg, bg);
             init_pair(colorpair, curs_color(fg), curs_color(bg));
         }
     }
 }
 
-
 void setcolor(int fg, int bg, t_main *struk)
 {
     /* set the color pair (colornum) and bold/bright (A_BOLD) */
 
     wattron(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
-    if (is_bold(fg)) {
+    if (is_bold(fg))
+    {
         attron(A_BOLD);
     }
 }
@@ -85,7 +89,8 @@ void unsetcolor(int fg, int bg, t_main *struk)
        bold/bright (A_BOLD) */
 
     wattroff(struk->map->winfos, COLOR_PAIR(colornum(fg, bg)));
-    if (is_bold(fg)) {
+    if (is_bold(fg))
+    {
         attroff(A_BOLD);
     }
 }
@@ -102,7 +107,7 @@ void init_ncurses(t_main *struk)
     clear();
     start_color();
     init_colorpairs();
-    signal (SIGWINCH, NULL);
+    signal(SIGWINCH, NULL);
     struk->map->maxcols = 1;
     struk->map->maxlines = LINES - 1;
     struk->map->warena = newwin(68, 200, 0, 0);
@@ -133,7 +138,7 @@ void print_header(t_main *struk)
 
     fg = 12;
     bg = 0;
-    setcolor(fg, bg, struk);                               // ca serait cool si ca pouvais marcher
+    setcolor(fg, bg, struk); // ca serait cool si ca pouvais marcher
     wattron(struk->map->winfos, A_BLINK);
     mvwprintw(struk->map->winfos, 2, 3, " ####   ####  #####  ###### #    #   ##   #####  ");
     mvwprintw(struk->map->winfos, 3, 3, "#    # #    # #    # #      #    #  #  #  #    # ");
@@ -144,8 +149,7 @@ void print_header(t_main *struk)
     wattroff(struk->map->winfos, A_BLINK);
     refresh();
     wrefresh(struk->map->winfos);
-    unsetcolor(fg, bg, struk);                            // mais ca marche pas
-
+    unsetcolor(fg, bg, struk); // mais ca marche pas
 }
 
 /*
@@ -170,106 +174,37 @@ void print_infos(t_main *struk)
     getch();
 }
 
-char	*ft_itoa_theo(long long n, int base)
-{
-	char		*s;
-	long long	nb;
-	int			len;
-
-	len = 1;
-	n < 0 ? ++len : 0;
-	nb = n < 0 ? -n : n;
-	while (nb >= base)
-	{
-		nb /= base;
-		++len;
-	}
-	if (!(s = (char*)malloc(sizeof(char) * (len + 1))))
-		return (NULL);
-	s[len] = '\0';
-	n < 0 ? *s = '-' : 0;
-	n < 0 ? n = -n : 0;
-	while (n >= base)
-	{
-		s[--len] = n % base < 10 ? (n % base) + 48 : (n % base) + 55;
-		n /= base;
-	}
-	s[--len] = n % base < 10 ? (n % base) + 48 : (n % base) + 55;
-	return (s);
-}
-
 /*
-** Prends une valeur et la convertis en hexa sous la forme char[2]
-*/
-
-char *hex(char c)
-{
-    char *ret;
-
-    if (!(ret = ft_itoa_theo(c - 48, 16)))
-        leave("Failed to transform in hexadecimal");
-    return (ret);
-}
-
-/*
-** Convertis chaque octet d'une des lignes de la memoire en hexa, séparés par des espaces
-*/
-
-char *arena_for_visu(t_main *struk, int j)
-{
-    char *ret;
-    char *str;
-    char *conv;
-    int i;
-
-    i = 0;
-    if (!(str = ft_strsub((char *)struk->map->arena, j, 64)))
-        leave("Failed to show arena");
-    if (!(ret = ft_memalloc(sizeof(char) * 193)))
-         leave("Failed to show arena");
-    j = 0;
-    while (i + 2 < 193 && str[j])
-    {
-        conv = hex(str[j]);
-        if (conv[0] && conv[1])
-        {
-            ret[i] = conv[0];
-            ret[i + 1] = conv[1];
-        }
-        else if (conv[0])
-        {
-            ret[i] = '0';
-            ret[i + 1] = conv[0];
-        }
-        ret[i + 2] = ' ';
-        i += 3;
-        j++;
-    }
-    return (ret);
-}
-
-/*
-** Affiche l'etat de la memoire dans la window principale
+** Affiche l'etat de la memoire dans la window principale en bouclant dessus et en l'affichant en hexadecimal
 */
 
 void print_arena(t_main *struk)
 {
-    int     i;
-    int     j;
-    char    *substr;
+    int i;
+    int j;
+    int z;
+    int x;
 
+    x = 0;
     i = 0;
-    j = 0;
-    substr = NULL;
-    struk->map->arena[0] = '1';
+    j = 3;
+    z = 0;
+
+    struk->map->arena[0] = '1'; // pour verifier que je parcours bien tout le tableau avec le visu
     struk->map->arena[4095] = '9';
+
     while (i < 64)
     {
-        if (!(substr = arena_for_visu(struk, j)))
-            leave("Failed to show arena");
-        mvwprintw(struk->map->warena,  i + 2, 4, substr);
+        j = 3;
+        x = 0;
+        while (x < 64)
+        {
+            if (z <= MEM_SIZE)
+                mvwprintw(struk->map->warena, i + 2, j, "%02x ", struk->map->arena[z++]);
+            j += 3;
+            x++;
+        }
         i++;
-        j += 64;
     }
     refresh();
     wrefresh(struk->map->warena);
@@ -282,7 +217,7 @@ void print_arena(t_main *struk)
 void start_ncurses(t_main *struk)
 {
     if (struk->visu != 1)
-        return ;
+        return;
     init_ncurses(struk);
     print_arena(struk);
     print_header(struk);

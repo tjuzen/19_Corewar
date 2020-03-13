@@ -28,16 +28,16 @@ t_main *some_other_parsing(int fd, t_main *struk, int num_play)
 	int i;
 
 	i = 0;
-	size = read(fd, &buffer,COMMENT_LENGTH);
-	while(i < 4)
+	size = read(fd, &buffer, COMMENT_LENGTH);
+	while (i < 4)
 		size = read(fd, &buf[i++], 1);
 	i = 0;
-	if(check_if_zero(buf))
+	if (check_if_zero(buf))
 		problem_occured("No NULL-bytes after comment");
-	size = read(fd, buff,struk->player[num_play].code_length);
+	size = read(fd, buff, struk->player[num_play].code_length);
 	struk->player[num_play].code = buff;
 	i = 0;
- 	struk->player[num_play].comment = buffer;
+	struk->player[num_play].comment = buffer;
 	return (struk);
 }
 
@@ -45,7 +45,7 @@ t_main *some_other_parsing(int fd, t_main *struk, int num_play)
 
 void problem_occured(char *problem)
 {
-	printf("%s\n",problem);
+	printf("%s\n", problem);
 	exit(0);
 }
 
@@ -56,10 +56,10 @@ int check_if_zero(uint8_t *buf)
 	int i;
 
 	i = 0;
-	while(i < 4)
+	while (i < 4)
 	{
-		if(buf[i] != 0)
-			return(1);
+		if (buf[i] != 0)
+			return (1);
 		i++;
 	}
 	return (0);
@@ -76,26 +76,26 @@ int check_if_zero(uint8_t *buf)
 // champion's executable code (only executable part of champion)."
 // On fait pareil que pour le COREWAR_EXEC_MAGIC et on chope la taille du Champion et on la stocke
 
-t_main		*some_parsing_checks(int fd, t_main *struk, int num_play)
+t_main *some_parsing_checks(int fd, t_main *struk, int num_play)
 {
 	char buffer[PROG_NAME_LENGTH];
-	size_t	size;
+	size_t size;
 	uint8_t buf[4];
 	uint32_t magic;
 	int i;
 
 	i = 0;
-	size = read(fd, &buffer,PROG_NAME_LENGTH);
+	size = read(fd, &buffer, PROG_NAME_LENGTH);
 	struk->player[num_play].name = buffer;
-	while(i < 4)
+	while (i < 4)
 		size = read(fd, &buf[i++], 1);
-	if(check_if_zero(buf))
+	if (check_if_zero(buf))
 		problem_occured("No NULL-bytes after file name");
 	i = 0;
-	while(i < 4)
+	while (i < 4)
 		size = read(fd, &buf[i++], 1);
-	magic = buf[0] << 24| (buf[1] << 16) | (buf[2] << 8) | (buf[3] << 0);
-	if(magic > CHAMP_MAX_SIZE/* || magic < 0*/)
+	magic = buf[0] << 24 | (buf[1] << 16) | (buf[2] << 8) | (buf[3] << 0);
+	if (magic > CHAMP_MAX_SIZE /* || magic < 0*/)
 		problem_occured("Champ size too big");
 	struk->player[num_play].code_length = magic;
 	return (struk);
@@ -126,23 +126,23 @@ int go_parse(t_main *struk, int argc, char **argv)
 	struk->order_player[1][0] = 0;
 	struk->order_player[2][0] = 0;
 	struk->order_player[3][0] = 0;
-	if(argc > 2)
+	if (argc > 2)
 	{
 		struk = check_arguments(argc, argv, struk); // simplement checker ce que l'on recçoit en argv
-		while(i < argc)
+		while (i < argc)
 		{
-			if(check_if_file(argv, i)) // si c'est un fichier ".cor"
+			if (check_if_file(argv, i)) // si c'est un fichier ".cor"
 			{
-				fd = open_files(argc, argv, struk, i); // ouvre le fichier
-				struk = some_parsing_checks(fd, struk,num_play); // voir fonction
-				struk = some_other_parsing(fd, struk, num_play); // voir fonction
+				fd = open_files(argc, argv, struk, i);						   // ouvre le fichier
+				struk = some_parsing_checks(fd, struk, num_play);			   // voir fonction
+				struk = some_other_parsing(fd, struk, num_play);			   // voir fonction
 				struk->player[num_play].ID = struk->order_player[num_play][0]; // Donne l'ID a la structure du joueur (qu'on avait avant mis dans une array 2D)
 				num_play++;
 			}
 			i++;
 		}
 		load_champ_to_arena(struk); // pour ajouter le code d'execution du champion dans notre memoire
-		return(0);
+		return (0);
 	}
 	return (0);
 }
@@ -153,6 +153,12 @@ int main(int argc, char **argv)
 
 	go_parse(&struk, argc, argv);
 	rules_round(&struk);
+
+	// int i = -1;
+
+	// while (++i < MEM_SIZE)
+	// 	printf("%02x ", struk.map->arena[i]);
+
 	start_ncurses(&struk);
 	return (0);
 }
